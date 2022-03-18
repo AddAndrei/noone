@@ -4,17 +4,24 @@
 namespace App\Http\Controllers;
 
 
+use App\Services\ArticleService;
+
 class MainController extends Controller
 {
 
-    public function __construct()
-    {
+    private $service;
 
+    public function __construct(ArticleService $service)
+    {
+        $this->service = $service;
     }
 
 
     public function index()
     {
-        return view('main.index');
+
+        return view('main.index', [
+            'articles' => $this->service->getArticles()
+        ]);
     }
 }

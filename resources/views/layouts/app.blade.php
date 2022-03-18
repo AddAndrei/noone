@@ -48,7 +48,7 @@
     @yield('content')
         <footer class="footer">
             <div class="container">
-                <div class="row">
+                <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 row-cols-1">
                     <div class="col">
                         <h2>Тредиум</h2>
                         &#169; 3001-3020 все права защищены
@@ -68,6 +68,7 @@
 
                         </ul>
                     </div>
+                    <div class="col"></div>
                 </div>
             </div>
         </footer>
