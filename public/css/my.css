@@ -1,0 +1,31 @@
+.my-section{
+    background: #E8ECEF;
+    height: 300px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.last-articles{
+    padding: 25px 0 0 0;
+}
+.last-articles .container .row .col{
+    margin: 0 0 25px 0;
+}
+.card-info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.card-info>div>svg{
+    cursor: pointer;
+}
+.views{
+    top: 2px;
+    position: relative;
+}
+footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+}
