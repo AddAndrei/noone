@@ -12,6 +12,10 @@ class articles extends Model
     protected $fillable = [
         'title',
         'slug',
+        'text',
+        'anonce',
+        'preview',
+        'image'
     ];
 
     public function sluggable()
@@ -22,4 +26,6 @@ class articles extends Model
             ]
         ];
     }
+
+
 }
