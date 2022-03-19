@@ -20,7 +20,7 @@ class ArticlesFactory extends Factory
         return [
             'title'     => $title,
             'slug'      => Str::of($title)->slug('-'),
-            'text'      => $this->faker->text(rand(200, 700)),
+            'text'      => $this->faker->text(rand(500, 1100)),
             'anonce'    => $this->faker->text(100),
             'preview'   => "https://via.placeholder.com/250",
             'image'       => "https://via.placeholder.com/250",

@@ -20,7 +20,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [App\Http\Controllers\MainController::class, 'index'])->name('main.index');
 
 Route::prefix('articles')->group(function(){
-    Route::get('/', [App\Http\Controllers\ArticlesController::class, 'index'])
-        ->name('articles.index');
+    $controller = App\Http\Controllers\ArticlesController::class;
+    Route::get('/', [$controller, 'index'])->name('articles.index');
+    Route::get('/{slug}', [$controller, 'article'])->name('articles.article');
 });
 

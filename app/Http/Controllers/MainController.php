@@ -9,19 +9,18 @@ use App\Services\ArticleService;
 class MainController extends Controller
 {
 
-    private $service;
+    private $articleService;
 
-    public function __construct(ArticleService $service)
+    public function __construct(ArticleService $articleService)
     {
-        $this->service = $service;
+        $this->articleService = $articleService;
     }
 
 
     public function index()
     {
-
         return view('main.index', [
-            'articles' => $this->service->getArticles()
+            'articles' => $this->articleService->getArticles()
         ]);
     }
 }
