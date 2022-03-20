@@ -23,5 +23,11 @@ Route::prefix('articles')->group(function(){
     $controller = App\Http\Controllers\ArticlesController::class;
     Route::get('/', [$controller, 'index'])->name('articles.index');
     Route::get('/{slug}', [$controller, 'article'])->name('articles.article');
+
+
+
 });
 
+Route::resource('/views', App\Http\Controllers\ViewsController::class);
+Route::post('/like', [App\Http\Controllers\LikesController::class, 'store']);
+Route::post('/comments', [App\Http\Controllers\CommentsController::class, 'store']);
