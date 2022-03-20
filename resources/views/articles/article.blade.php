@@ -42,7 +42,12 @@
                     <hr>
                 </div>
                 <br><br>
-                <div class="col">
+                <div class="col" id="alert" style="display: none;">
+                    <div class="alert alert-success" role="alert">
+                        Комментарий отправлен!
+                    </div>
+                </div>
+                <div class="col" id="hidden-block">
                     <h2>Оставить комментарий</h2>
                     <form action="">
                         <div class="mb-3">
@@ -110,7 +115,10 @@
                 type:"post",
                 data:data,
                 success:(data)=>{
-                    console.log(data);
+                    if (data.success == 200) {
+                        $("#hidden-block").remove();
+                        $("#alert").css({"display":"block"});
+                    }
                 }
             });
         }

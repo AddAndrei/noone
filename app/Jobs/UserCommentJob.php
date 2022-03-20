@@ -33,6 +33,7 @@ class UserCommentJob implements ShouldQueue
     public function handle()
     {
         //
+        sleep(600);
         DB::table('comments')->insert([
             'subject'   => $this->data['subject'],
             'body'      => $this->data['body'],

@@ -13,9 +13,6 @@ class CommentsService implements StoreInterface
 
     public function store($request)
     {
-
-        sleep(600);
         dispatch(new UserCommentJob($request->all()));
-
     }
 }

@@ -24,7 +24,7 @@ class CommentsController extends Controller
         ]);
         if ($valid) {
             $this->commentsService->store($request);
-            return response(['success' => 200])->json();
+            return response()->json(['success' => 200], 200);
         }
 
 

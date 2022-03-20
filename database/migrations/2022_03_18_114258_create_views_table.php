@@ -16,7 +16,7 @@ class CreateViewsTable extends Migration
         Schema::create('views', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('userIP')->unique();
+            $table->string('userIP');
             $table->unsignedBigInteger('article_id');
             $table->foreign('article_id')->references('id')->on('articles');
 
