@@ -38,16 +38,8 @@ class ViewsController extends Controller
             'userIP'  => $request->ip(),
             'article_id' => (int)$request->post('articleID')
         ];
-        $response = [];
-
-        if ($this->viewsService->store($data)) {
-            $response = [
-                'views'     => $this->viewsService->show((int)$request->post('articleID')),
-                'success'   => 'ok'
-            ];
-            return response($response, 200);
-        }
-        return response('', 404);
+        $res = $this->viewsService->store($data);
+        return response()->json($res);
 
     }
 

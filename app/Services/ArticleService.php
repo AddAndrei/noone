@@ -52,7 +52,10 @@ class ArticleService implements AddInterface
     public function getByField($field, $value)
     {
         unset($this->fields[array_search('articles.preview', $this->fields)]);
-        $this->addFields(['likes.likeIs', 'articles.id', 'articles.text' ,DB::raw("COUNT(views.article_id) as vc")]);
+        $this->addFields([
+            'likes.likeIs', 'articles.id', 'articles.text' ,DB::raw("COUNT(views.article_id) as vc")
+
+        ]);
 
         return DB::table('articles')
             ->select($this->fields)

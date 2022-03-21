@@ -5,34 +5,43 @@ namespace App\Services;
 
 
 use App\Interfaces\StoreInterface;
+use App\Jobs\UpdateLikeJob;
 use Illuminate\Support\Facades\DB;
+use App\Jobs\LikesJob;
+
 class LikesService implements StoreInterface
 {
     private $table = "likes";
 
     public function store($data)
     {
-        if ( !$this->checkByIP($data['userIP']) ) {
-            DB::table($this->table)->insert([
-                'userIP'    => $data['userIP'],
-                'article_id'=> $data['article_id'],
-                'likeIs'    => true
-            ]);
-            return true;
+        if ( !$this->checkByIP($data['userIP'], $data['article_id']) ) {
+
+            dispatch(new LikesJob($data));
+
+            return [
+                'like'  => 'addlike'
+            ];
+
         }else{
-            $likeIs = (bool)DB::table($this->table)->where('userIP', $data['userIP'])->get()->toArray()[0]->likeIs;
-            DB::table($this->table)
-                ->where('userIP', $data['userIP'])
-                ->update([
-                'likeIs' => !$likeIs
-            ]);
-            return (int)!$likeIs;
+
+            dispatch(new UpdateLikeJob($data));
+
+            return [
+                'like'  => 'update'
+            ];
+
         }
     }
 
-    private function checkByIP($ip)
+    public function likesCount($articleID)
     {
-        return DB::table($this->table)->where('userIP', $ip)->exists();
+        return DB::table($this->table)->where([['article_id', $articleID], ['likeIs', true]])->count();
+    }
+
+    private function checkByIP($ip, $artID)
+    {
+        return DB::table($this->table)->where([['userIP', $ip], ['article_id', $artID]])->exists();
     }
 
 }

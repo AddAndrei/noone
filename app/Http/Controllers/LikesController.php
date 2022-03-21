@@ -18,9 +18,10 @@ class LikesController extends Controller
     {
         $data = [
             'userIP'        => $request->ip(),
-            'article_id'    => $request->post('articleID')
+            'article_id'    => $request->post('articleID'),
+            'likeIs'        => true
         ];
 
-        return response($this->likesService->store($data));
+        return response()->json($this->likesService->store($data));
     }
 }

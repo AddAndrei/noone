@@ -5,16 +5,19 @@ namespace App\Http\Controllers;
 
 
 use App\Services\ArticleService;
+use App\Services\LikesService;
 use App\Services\TagService;
 use Illuminate\Support\Facades\DB;
 class ArticlesController extends Controller
 {
     private $articleService;
     private $tagService;
-    public function __construct(ArticleService $articleService, TagService $tagService)
+    private $likeService;
+    public function __construct(ArticleService $articleService, TagService $tagService, LikesService $likesService)
     {
         $this->articleService = $articleService;
         $this->tagService = $tagService;
+        $this->likeService = $likesService;
     }
 
     public function index()
@@ -32,10 +35,11 @@ class ArticlesController extends Controller
     {
         $article = $this->articleService->getByField('articles.slug', $slug);
         $tags = $this->tagService->getTagsForArticle($article->toArray()[0]->id);
-
+        $likes = $this->likeService->likesCount($article->toArray()[0]->id);
         return view('articles.article', [
             'article' => $article,
-            'tags'    => $tags
+            'tags'    => $tags,
+            'likes'   => $likes
         ]);
     }
 

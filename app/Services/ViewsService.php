@@ -5,7 +5,9 @@ namespace App\Services;
 
 use App\Interfaces\ShowInterface;
 use App\Interfaces\StoreInterface;
+use App\Jobs\ViewsJob;
 use Illuminate\Support\Facades\DB;
+
 class ViewsService implements StoreInterface, ShowInterface
 {
     private $table = "views";
@@ -15,13 +17,17 @@ class ViewsService implements StoreInterface, ShowInterface
         return DB::table($this->table)->where([['userIP', $ip], ['article_id', $artID]])->exists();
     }
 
+
     public function store($data)
     {
         if (! $this->checkByIP($data['userIP'], $data['article_id']) ) {
-            DB::table($this->table)->insert($data);
-            return true;
+            dispatch(new ViewsJob($data));
+            return [
+                'views' => $this->show($data['article_id']) + 1,// пока там очередь выполнится ....
+                'success' => 200
+            ];
         }
-        return false;
+        return ['error'];
     }
 
     public function show($ID)
