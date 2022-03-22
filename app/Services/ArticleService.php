@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Interfaces\AddInterface;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class ArticleService implements AddInterface
 {
@@ -18,17 +19,28 @@ class ArticleService implements AddInterface
 
     public function getArticles()
     {
+
         $this->addFields(['likes.likeIs', DB::raw("COUNT(views.article_id) as vc")]);
 
-        return DB::table('articles')
-            ->select($this->fields)
-            ->join('likes', 'articles.id', '=', 'likes.article_id', 'left outer')
-            ->join('views', 'views.article_id', '=', 'articles.id', 'right')
-            ->groupBy('articles.id')
-            ->orderBy('articles.created_at', 'DESC')
-            ->limit(6)
-            ->get();
+        $key = __CLASS__ . __METHOD__;
+
+        $result = Cache::get($key, false);
+
+        if ( !$result ) {
+            $result = DB::table('articles')
+                ->select($this->fields)
+                ->join('likes', 'articles.id', '=', 'likes.article_id', 'left outer')
+                ->join('views', 'views.article_id', '=', 'articles.id', 'right')
+                ->groupBy('articles.id')
+                ->orderBy('articles.created_at', 'DESC')
+                ->limit(6)
+                ->get();
+            Cache::put($key, $result, 60);
+        }
+        return $result;
     }
+
+
 
     public function addFields($fieldsArray)
     {
@@ -38,14 +50,20 @@ class ArticleService implements AddInterface
     public function getArticlesWithPagination($amountArticles)
     {
         $this->addFields(['likes.likeIs', DB::raw("COUNT(views.article_id) as vc")]);
+        $key = __CLASS__ . __METHOD__ . $amountArticles;
+        $result = Cache::get($key, false);
 
-        return DB::table('articles')
-            ->select($this->fields)
-            ->join('likes', 'articles.id', '=', 'likes.article_id', 'left outer')
-            ->join('views', 'views.article_id', '=', 'articles.id', 'right')
-            ->groupBy('articles.id')
-            ->orderBy('articles.created_at', 'DESC')
-            ->paginate($amountArticles);
+        if ( !$result ) {
+            $result = DB::table('articles')
+                ->select($this->fields)
+                ->join('likes', 'articles.id', '=', 'likes.article_id', 'left outer')
+                ->join('views', 'views.article_id', '=', 'articles.id', 'right')
+                ->groupBy('articles.id')
+                ->orderBy('articles.created_at', 'DESC')
+                ->paginate($amountArticles);
+            Cache::put($key, $result, 60);
+        }
+        return $result;
 
     }
 
@@ -56,13 +74,20 @@ class ArticleService implements AddInterface
             'likes.likeIs', 'articles.id', 'articles.text' ,DB::raw("COUNT(views.article_id) as vc")
 
         ]);
+        $key = __CLASS__ . __METHOD__;
 
-        return DB::table('articles')
-            ->select($this->fields)
-            ->join('likes', 'articles.id', '=', 'likes.article_id', 'left outer')
-            ->join('views', 'views.article_id', '=', 'articles.id', 'right')
-            ->where($field, $value)
-            ->get();
+        $result = Cache::get($key, false);
+
+        if ( !$result ) {
+            $result = DB::table('articles')
+                ->select($this->fields)
+                ->join('likes', 'articles.id', '=', 'likes.article_id', 'left outer')
+                ->join('views', 'views.article_id', '=', 'articles.id', 'right')
+                ->where($field, $value)
+                ->get();
+            Cache::put($key, $result, 60);
+        }
+        return $result;
     }
 
 }
